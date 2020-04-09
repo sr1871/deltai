@@ -1,0 +1,23 @@
+version : "3.5"
+
+services :
+  db:
+    image : postgres
+    restart: always
+    environment:
+      POSTGRES_DB: "deltai"
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+  web :
+    build : .
+    command: bash -c "python /deltai/manage.py upgrade && python /deltai/app.py"
+
+    volumes: 
+      - .:/canastarosa
+    ports: 
+      - 3002:3002
+    depends_on:
+      - db
+    restart: always
+    
+
+

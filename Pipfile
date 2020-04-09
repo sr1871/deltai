@@ -1,0 +1,21 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+pylint = "*"
+
+[packages]
+scrapy = "*"
+nltk = "*"
+flask = "*"
+scikit-learn = "*"
+pandas = "*"
+psycopg2 = "==2.8.4"
+flask-sqlalchemy = "===2.4.1"
+flask-migrate = "==2.5.2"
+flask-script = "*"
+
+[requires]
+python_version = "3.7"
