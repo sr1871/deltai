@@ -5,14 +5,16 @@ services :
     image : postgres
     restart: always
     environment:
-      POSTGRES_DB: "deltai"
-      POSTGRES_HOST_AUTH_METHOD: "trust"
+      POSTGRES_DB: deltai
+      POSTGRES_HOST_AUTH_METHOD: trust
+    expose:
+      - 5432
   web :
     build : .
-    command: bash -c "python /deltai/manage.py upgrade && python /deltai/app.py"
+    command: bash -c "python -m nltk.downloader stopwords && python /deltai/manage.py db upgrade && python /deltai/app.py"
 
     volumes: 
-      - .:/canastarosa
+      - .:/deltai
     ports: 
       - 3002:3002
     depends_on:

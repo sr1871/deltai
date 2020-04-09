@@ -6,7 +6,7 @@ from app import app, db
 
 app.config.from_mapping(
         SECRET_KEY='dev',
-        SQLALCHEMY_DATABASE_URI = "postgresql:///deltai"
+        SQLALCHEMY_DATABASE_URI = "postgresql+psycopg2://postgres:@db/deltai"
     )
 
 migrate = Migrate(app, db)

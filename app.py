@@ -16,7 +16,7 @@ def create_app(test_config=None):
     app = Flask(__name__)
     app.config.from_mapping(
         SECRET_KEY='dev',
-        SQLALCHEMY_DATABASE_URI = "postgresql:///deltai"
+        SQLALCHEMY_DATABASE_URI = "postgresql+psycopg2://postgres@db/deltai"
     )
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     return app
@@ -30,8 +30,9 @@ import models
 @app.route('/api/news', methods=['POST',])
 def hello():
     data = request.get_json()
-    if 'tags' in  data:
-        tags_ids = list_id(models.Tag.query.filter(models.Tag.name.in_(data.get('tags', []))))
+    if 'keywords' in  data:
+        keywords = [x.lower() for x in data.get('keywords', [])]
+        tags_ids = list_id(models.Tag.query.filter(models.Tag.name.in_(keywords)))
         news_ids = db.session.query(
                 models.NewsTag.news_id, 
                 func.sum(models.NewsTag.rank).label('total'),
@@ -46,7 +47,7 @@ def hello():
         news_return = []
         for news in response_news :
             news_return.append({
-                'ranking' : news_ids.get(news.id),
+                'ranking' : (news_ids.get(news.id) / len(tags_ids)) * 2,
                 'title' : news.title,
                 'content' : news.content,
                 'reference' :  news.url if '://' in news.url else (news.newspaper.url + '/' + news.url)
